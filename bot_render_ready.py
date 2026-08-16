@@ -1,40 +1,4 @@
-import os
-import sqlite3
-import threading
-from http.server import BaseHTTPRequestHandler, HTTPServer
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import (
-    Application, CommandHandler, CallbackQueryHandler, ContextTypes
-)
-
-BOT_TOKEN = os.getenv("BOT_TOKEN", "PASTE_YOUR_BOT_TOKEN_HERE")
-DB = "earning_real.db"
-
-def db():
-    con = sqlite3.connect(DB)
-    con.execute("""CREATE TABLE IF NOT EXISTS users(
-        user_id INTEGER PRIMARY KEY,
-        username TEXT,
-        balance INTEGER DEFAULT 0,
-        referrals INTEGER DEFAULT 0,
-        referred_by INTEGER
-    )""")
-    con.execute("""CREATE TABLE IF NOT EXISTS tasks(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT NOT NULL,
-        reward INTEGER NOT NULL,
-        url TEXT NOT NULL,
-        active INTEGER DEFAULT 1
-    )""")
-    con.execute("""CREATE TABLE IF NOT EXISTS completions(
-        user_id INTEGER,
-        task_id INTEGER,
-        PRIMARY KEY(user_id, task_id)
-    )""")
-    con.execute("""CREATE TABLE IF NOT EXISTS withdrawals(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER,
-        amount INTEGER,
+BOT_TOKEN = os.getenv("BOT_TOKEN", "PASTE_YOUR_BOT_TOKEN_HERE")        amount INTEGER,
         wallet TEXT,
         status TEXT DEFAULT 'pending'
     )""")
